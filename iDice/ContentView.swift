@@ -9,16 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            DieView()
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Text("iDice")
+                            .font(.largeTitle)
+                            .bold()
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink(destination: SettingsView()) {
+                            Image(systemName: "gearshape.circle.fill")
+                                .foregroundStyle(.gray)
+                                .font(.title)
+                        }
+                    }
+                }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
 }
+
