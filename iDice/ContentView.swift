@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var numberOfSides = 6
+    @StateObject private var diceSettings = DiceSettings()
+    
     @State private var side = 1
     
     var body: some View {
@@ -21,10 +22,11 @@ struct ContentView: View {
                         Spacer()
                         
                         Die6SidesView(side: $side)
-                            .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
+                            
                         
                         Spacer()
                     }
+                    .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
                     
                     Spacer()
                     
@@ -35,13 +37,13 @@ struct ContentView: View {
                                 .bold()
                                 .font(.largeTitle)
                         }
-                        CircularProgressView(progress: Double(side) / Double(numberOfSides))
+                        CircularProgressView(progress: Double(side) / Double(diceSettings.numberOfSides))
                     }
                     
                     Spacer()
                     
                     Button() {
-                        side = Int.random(in: 1...numberOfSides)
+                        side = Int.random(in: 1...diceSettings.numberOfSides)
                     } label: {
                         Text("ROLL")
                             .bold()
@@ -67,7 +69,7 @@ struct ContentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink(destination: SettingsView().environmentObject(diceSettings)) {
                         Image(systemName: "gearshape.circle.fill")
                             .foregroundStyle(.gray)
                             .font(.title)
