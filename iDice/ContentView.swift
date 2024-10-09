@@ -28,6 +28,18 @@ struct ContentView: View {
                     
                     Spacer()
                     
+                    ZStack {
+                        VStack {
+                            Text("Total")
+                            Text("\(side)")
+                                .bold()
+                                .font(.largeTitle)
+                        }
+                        CircularProgressView(progress: Double(side) / Double(numberOfSides))
+                    }
+                    
+                    Spacer()
+                    
                     Button() {
                         side = Int.random(in: 1...numberOfSides)
                     } label: {
