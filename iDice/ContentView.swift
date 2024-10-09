@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var numberOfSides = 6
+    @State private var side = 1
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -17,7 +20,7 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         
-                        DieView()
+                        Die6SidesView()
                             .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
                         
                         Spacer()
@@ -26,7 +29,7 @@ struct ContentView: View {
                     Spacer()
                     
                     Button() {
-
+                        side = Int.random(in: 1...numberOfSides)
                     } label: {
                         Text("ROLL")
                             .bold()

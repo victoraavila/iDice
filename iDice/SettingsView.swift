@@ -33,7 +33,7 @@ struct SettingsView: View {
             }
             
             Section {
-                Stepper(value: $numberOfDice, in: 1...8, step: 1) {
+                Stepper(value: $numberOfDice, in: 1...6, step: 1) {
                     Text(numberOfDice == 1 ? "\(numberOfDice) die" : "\(numberOfDice) dice")
                 }
             } header: {
