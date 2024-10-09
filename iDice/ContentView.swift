@@ -20,7 +20,7 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         
-                        Die6SidesView()
+                        Die6SidesView(side: $side)
                             .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
                         
                         Spacer()

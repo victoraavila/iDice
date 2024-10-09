@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Die6SidesView: View {
-    @State private var face = 6
+    @Binding var side: Int
     
     var body: some View {
         ZStack {
@@ -17,12 +17,12 @@ struct Die6SidesView: View {
                 .shadow(radius: 10)
                 .frame(width: 100, height: 100)
             
-            if (face == 1) {
+            if (side == 1) {
                 Circle()
                     .frame(width: 20)
             }
             
-            else if (face == 2) {
+            else if (side == 2) {
                 VStack {
                     HStack {
                         Spacer()
@@ -85,7 +85,7 @@ struct Die6SidesView: View {
                 .frame(width: 100)
             }
             
-            else if (face == 3) {
+            else if (side == 3) {
                 VStack {
                     HStack {
                         Spacer()
@@ -141,7 +141,7 @@ struct Die6SidesView: View {
                 .frame(width: 100)
             }
             
-            else if (face == 4) {
+            else if (side == 4) {
                 VStack {
                     HStack {
                         Spacer()
@@ -202,7 +202,7 @@ struct Die6SidesView: View {
                 .frame(width: 100)
             }
             
-            else if (face == 5) {
+            else if (side == 5) {
                 VStack {
                     HStack {
                         Spacer()
@@ -252,7 +252,7 @@ struct Die6SidesView: View {
                 .frame(width: 100)
             }
             
-            else if (face == 6) {
+            else if (side == 6) {
                 VStack {
                     HStack {
                         Spacer()
@@ -322,5 +322,5 @@ struct Die6SidesView: View {
 }
 
 #Preview {
-    Die6SidesView()
+    Die6SidesView(side: .constant(4))
 }
