@@ -18,13 +18,54 @@ struct ContentView: View {
                 VStack {
                     Spacer()
                     
-                    HStack {
-                        Spacer()
-                        
-                        Die6SidesView(side: $side)
+                    VStack {
+                        HStack {
+                            Spacer()
                             
+                            Die6SidesView(side: $side)
+                                .padding(.horizontal)
+                            
+                            if (diceSettings.numberOfDice > 1) {
+                                Die6SidesView(side: $side)
+                                    .padding(.horizontal)
+                            }
+                            
+                            Spacer()
+                        }
                         
-                        Spacer()
+                        if (diceSettings.numberOfDice > 2) {
+                            HStack {
+                                Spacer()
+                                
+                                Die6SidesView(side: $side)
+                                    .padding(.horizontal)
+                                
+                                if (diceSettings.numberOfDice > 3) {
+                                    Die6SidesView(side: $side)
+                                        .padding(.horizontal)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.top)
+                        }
+                        
+                        if (diceSettings.numberOfDice > 4) {
+                            HStack {
+                                Spacer()
+                                
+                                Die6SidesView(side: $side)
+                                    .padding(.horizontal)
+                                
+                                if (diceSettings.numberOfDice > 5) {
+                                    Die6SidesView(side: $side)
+                                        .padding(.horizontal)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.top)
+                        }
                     }
                     .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
                     
