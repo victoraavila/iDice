@@ -74,11 +74,11 @@ struct ContentView: View {
                     ZStack {
                         VStack {
                             Text("Total")
-                            Text("\(sides.reduce(0, +))")
+                            Text("\(sides[0...diceSettings.numberOfDice - 1].reduce(0, +))")
                                 .bold()
                                 .font(.largeTitle)
                         }
-                        CircularProgressView(progress: Double(sides.reduce(0, +)) / (Double(diceSettings.numberOfSides)*Double(diceSettings.numberOfDice)))
+                        CircularProgressView(progress: Double(sides[0...diceSettings.numberOfDice - 1].reduce(0, +)) / (Double(diceSettings.numberOfSides)*Double(diceSettings.numberOfDice)))
                     }
                     
                     Spacer()
