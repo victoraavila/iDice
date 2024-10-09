@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var diceSettings = DiceSettings()
     
-    @State private var side = 1
+    @State private var sides: [Int] = [1, 0, 0, 0, 0, 0]
     
     var body: some View {
         NavigationStack {
@@ -22,11 +22,11 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             
-                            Die6SidesView(side: $side)
+                            Die6SidesView(side: $sides[0])
                                 .padding(.horizontal)
                             
                             if (diceSettings.numberOfDice > 1) {
-                                Die6SidesView(side: $side)
+                                Die6SidesView(side: $sides[1])
                                     .padding(.horizontal)
                             }
                             
@@ -37,11 +37,11 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $side)
+                                Die6SidesView(side: $sides[2])
                                     .padding(.horizontal)
                                 
                                 if (diceSettings.numberOfDice > 3) {
-                                    Die6SidesView(side: $side)
+                                    Die6SidesView(side: $sides[3])
                                         .padding(.horizontal)
                                 }
                                 
@@ -54,11 +54,11 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $side)
+                                Die6SidesView(side: $sides[4])
                                     .padding(.horizontal)
                                 
                                 if (diceSettings.numberOfDice > 5) {
-                                    Die6SidesView(side: $side)
+                                    Die6SidesView(side: $sides[5])
                                         .padding(.horizontal)
                                 }
                                 
@@ -74,17 +74,17 @@ struct ContentView: View {
                     ZStack {
                         VStack {
                             Text("Total")
-                            Text("\(side)")
+                            Text("\(sides.reduce(0, +))")
                                 .bold()
                                 .font(.largeTitle)
                         }
-                        CircularProgressView(progress: Double(side) / Double(diceSettings.numberOfSides))
+                        CircularProgressView(progress: Double(sides.reduce(0, +)) / (Double(diceSettings.numberOfSides)*Double(diceSettings.numberOfDice)))
                     }
                     
                     Spacer()
                     
                     Button() {
-                        side = Int.random(in: 1...diceSettings.numberOfSides)
+                        sides = sides.map { _ in Int.random(in: 1...diceSettings.numberOfSides) }
                     } label: {
                         Text("ROLL")
                             .bold()
