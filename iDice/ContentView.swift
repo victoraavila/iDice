@@ -5,12 +5,18 @@
 //  Created by Víctor Ávila on 07/10/24.
 //
 
+import Combine
 import SwiftUI
 
 struct ContentView: View {
     @StateObject private var diceSettings = DiceSettings()
     
     @State private var sides: [Int] = [1, 0, 0, 0, 0, 0]
+    
+    // To flick through multiple rolls instead of setting up a final value
+    @State var startDate = Date.now
+    @State var timeElapsed: Int = 0
+    @State var timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationStack {
@@ -68,6 +74,13 @@ struct ContentView: View {
                         }
                     }
                     .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
+                    .onReceive(timer) { firedDate in
+                        sides = sides.map { _ in Int.random(in: 1...diceSettings.numberOfSides) }
+                        
+                        if Int(firedDate.timeIntervalSince(startDate)) >= 1 {
+                            timer.upstream.connect().cancel()
+                        }
+                    }
                     
                     Spacer()
                     
@@ -84,6 +97,11 @@ struct ContentView: View {
                     Spacer()
                     
                     Button() {
+                        timer.upstream.connect().cancel()
+                        
+                        timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
+                        startDate = Date.now
+                        
                         sides = sides.map { _ in Int.random(in: 1...diceSettings.numberOfSides) }
                     } label: {
                         Text("ROLL")
