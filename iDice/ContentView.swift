@@ -186,6 +186,8 @@ struct ContentView: View {
             Die6SidesView(side: side)
         case 8:
             Die8SidesView(side: side)
+        case 10:
+            Die10SidesView(side: side)
         // Add more cases for other die types
         default:
             Die6SidesView(side: side) // Default to 6-sided die or create a generic die view
