@@ -9,9 +9,7 @@ import Combine
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var diceSettings = DiceSettings()
-    
-    @State private var sides: [Int] = [1, 0, 0, 0, 0, 0]
+    @StateObject private var appState = AppState()
     
     // To flick through multiple rolls instead of setting up a final value
     @State var startDate = Date.now
@@ -20,7 +18,6 @@ struct ContentView: View {
     @State private var isRolling = false
     
     // Storing previous results
-    @State var lastScores: [Int] = []
     @State private var showBottomSheet = true
     @State private var detentAmount: PresentationDetent = .fraction(0.07)
     
@@ -34,26 +31,26 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             
-                            Die6SidesView(side: $sides[0])
+                            Die6SidesView(side: $appState.sides[0])
                                 .padding(.horizontal)
                             
-                            if (diceSettings.numberOfDice > 1) {
-                                Die6SidesView(side: $sides[1])
+                            if (appState.diceSettings.numberOfDice > 1) {
+                                Die6SidesView(side: $appState.sides[1])
                                     .padding(.horizontal)
                             }
                             
                             Spacer()
                         }
                         
-                        if (diceSettings.numberOfDice > 2) {
+                        if (appState.diceSettings.numberOfDice > 2) {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $sides[2])
+                                Die6SidesView(side: $appState.sides[2])
                                     .padding(.horizontal)
                                 
-                                if (diceSettings.numberOfDice > 3) {
-                                    Die6SidesView(side: $sides[3])
+                                if (appState.diceSettings.numberOfDice > 3) {
+                                    Die6SidesView(side: $appState.sides[3])
                                         .padding(.horizontal)
                                 }
                                 
@@ -62,15 +59,15 @@ struct ContentView: View {
                             .padding(.top)
                         }
                         
-                        if (diceSettings.numberOfDice > 4) {
+                        if (appState.diceSettings.numberOfDice > 4) {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $sides[4])
+                                Die6SidesView(side: $appState.sides[4])
                                     .padding(.horizontal)
                                 
-                                if (diceSettings.numberOfDice > 5) {
-                                    Die6SidesView(side: $sides[5])
+                                if (appState.diceSettings.numberOfDice > 5) {
+                                    Die6SidesView(side: $appState.sides[5])
                                         .padding(.horizontal)
                                 }
                                 
@@ -82,15 +79,15 @@ struct ContentView: View {
                     .frame(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
                     .onReceive(timer) { firedDate in
                         if isRolling {
-                            sides = sides.map { _ in Int.random(in: 1...diceSettings.numberOfSides) }
+                            appState.sides = appState.sides.map { _ in Int.random(in: 1...appState.diceSettings.numberOfSides) }
                             
                             if Int(firedDate.timeIntervalSince(startDate)) >= 1 {
                                 isRolling = false
-                                if lastScores.count >= 5 {
-                                    lastScores.removeFirst()
+                                if appState.lastScores.count >= 5 {
+                                    appState.lastScores.removeFirst()
                                 }
-                                lastScores.append(sides[0...diceSettings.numberOfDice - 1].reduce(0, +))
-                                saveState()
+                                appState.lastScores.append(appState.sides[0...appState.diceSettings.numberOfDice - 1].reduce(0, +))
+                                appState.saveState()
                                 
                             }
                         }
@@ -101,11 +98,11 @@ struct ContentView: View {
                     ZStack {
                         VStack {
                             Text("Total")
-                            Text("\(sides[0...diceSettings.numberOfDice - 1].reduce(0, +))")
+                            Text("\(appState.sides[0...appState.diceSettings.numberOfDice - 1].reduce(0, +))")
                                 .bold()
                                 .font(.largeTitle)
                         }
-                        CircularProgressView(progress: Double(sides[0...diceSettings.numberOfDice - 1].reduce(0, +)) / (Double(diceSettings.numberOfSides)*Double(diceSettings.numberOfDice)))
+                        CircularProgressView(progress: Double(appState.sides[0...appState.diceSettings.numberOfDice - 1].reduce(0, +)) / (Double(appState.diceSettings.numberOfSides)*Double(appState.diceSettings.numberOfDice)))
                     }
                     
                     Spacer()
@@ -113,7 +110,7 @@ struct ContentView: View {
                     Button() {
                         isRolling = true
                         startDate = Date.now
-                        sides = sides.map { _ in Int.random(in: 1...diceSettings.numberOfSides) }
+                        appState.sides = appState.sides.map { _ in Int.random(in: 1...appState.diceSettings.numberOfSides) }
                     } label: {
                         Text("ROLL")
                             .bold()
@@ -139,8 +136,8 @@ struct ContentView: View {
                             .padding(.bottom)
                         
                         if detentAmount == .fraction(0.3) {
-                            if lastScores.count > 0 {
-                                ForEach(lastScores.reversed(), id: \.self) { score in
+                            if appState.lastScores.count > 0 {
+                                ForEach(appState.lastScores.reversed(), id: \.self) { score in
                                     Text("\(score)")
                                 }
                             }
@@ -163,7 +160,7 @@ struct ContentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: SettingsView().environmentObject(diceSettings)) {
+                    NavigationLink(destination: SettingsView().environmentObject(appState)) {
                         Image(systemName: "gearshape.circle.fill")
                             .foregroundStyle(.gray)
                             .font(.title)
@@ -175,38 +172,13 @@ struct ContentView: View {
             }
             .onAppear {
                 showBottomSheet = true
-                print(sides)
-                loadPreviousState()
+                appState.loadState()
             }
         }
     }
     
     private func startTimer() {
         timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
-    }
-    
-    private func loadPreviousState() {
-        do {
-            let savePath = URL.documentsDirectory.appending(path: "PreviousState")
-            let data = try Data(contentsOf: savePath)
-            let decodedState = try JSONDecoder().decode(PreviousState.self, from: data)
-            self.sides = decodedState.sides
-            self.lastScores = decodedState.lastScores
-        } catch {
-            print("Unable to load previous state. Using default values.")
-        }
-    }
-    
-    private func saveState() {
-        do {
-            let savePath = URL.documentsDirectory.appending(path: "PreviousState")
-            let state = PreviousState(sides: sides,
-                                      lastScores: lastScores)
-            let data = try JSONEncoder().encode(state)
-            try data.write(to: savePath, options: [.atomic, .completeFileProtection])
-        } catch {
-            print("Unable to save state.")
-        }
     }
 }
 

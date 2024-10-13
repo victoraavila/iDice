@@ -32,13 +32,17 @@ struct Die6SidesView: View {
                         ForEach(0..<3) { column in
                             Circle()
                                 .frame(width: 20, height: 20)
-                                .foregroundStyle(dotPositions[side - 1][row * 3 + column] ? .black : .clear)
+                                .foregroundStyle(dotPositions[safeIndex][row * 3 + column] ? .black : .clear)
                         }
                     }
                 }
             }
             .frame(width: 100, height: 100)
         }
+    }
+    
+    private var safeIndex: Int {
+        max(0, min(side - 1, dotPositions.count - 1))
     }
 }
 

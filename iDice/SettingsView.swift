@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var diceSettings: DiceSettings
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
         Form {
             Section {
                 HStack {
                     Spacer() // Align to the left
-                    Picker("", selection: $diceSettings.numberOfSides) {
+                    Picker("", selection: $appState.diceSettings.numberOfSides) {
                         Text("4").tag(4)
                         Text("6").tag(6)
                         Text("8").tag(8)
@@ -30,13 +30,22 @@ struct SettingsView: View {
             } header: {
                 Text("Number of sides on each die")
             }
+            .onChange(of: appState.diceSettings.numberOfSides) {
+                appState.saveState()
+            }
+            
             
             Section {
-                Stepper(value: $diceSettings.numberOfDice, in: 1...6, step: 1) {
-                    Text(diceSettings.numberOfDice == 1 ? "\(diceSettings.numberOfDice) die" : "\(diceSettings.numberOfDice) dice")
+                Stepper(value: $appState.diceSettings.numberOfDice, in: 1...6, step: 1) {
+                    Text(appState.diceSettings.numberOfDice == 1 ?
+                         "\(appState.diceSettings.numberOfDice) die" :
+                         "\(appState.diceSettings.numberOfDice) dice")
                 }
             } header: {
                 Text("Number of dice")
+            }
+            .onChange(of: appState.diceSettings.numberOfDice) {
+                appState.saveState()
             }
         }
     }
