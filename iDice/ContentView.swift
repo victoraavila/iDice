@@ -123,6 +123,7 @@ struct ContentView: View {
                                     .foregroundStyle(.gray.opacity(0.5))
                             )
                     }
+                    .sensoryFeedback(.impact(weight: .heavy, intensity: 1), trigger: appState.sides)
                     
                     Spacer()
                     
