@@ -90,6 +90,8 @@ struct ContentView: View {
                                     lastScores.removeFirst()
                                 }
                                 lastScores.append(sides[0...diceSettings.numberOfDice - 1].reduce(0, +))
+                                saveState()
+                                
                             }
                         }
                     }
@@ -173,12 +175,38 @@ struct ContentView: View {
             }
             .onAppear {
                 showBottomSheet = true
+                print(sides)
+                loadPreviousState()
             }
         }
     }
     
     private func startTimer() {
         timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
+    }
+    
+    private func loadPreviousState() {
+        do {
+            let savePath = URL.documentsDirectory.appending(path: "PreviousState")
+            let data = try Data(contentsOf: savePath)
+            let decodedState = try JSONDecoder().decode(PreviousState.self, from: data)
+            self.sides = decodedState.sides
+            self.lastScores = decodedState.lastScores
+        } catch {
+            print("Unable to load previous state. Using default values.")
+        }
+    }
+    
+    private func saveState() {
+        do {
+            let savePath = URL.documentsDirectory.appending(path: "PreviousState")
+            let state = PreviousState(sides: sides,
+                                      lastScores: lastScores)
+            let data = try JSONEncoder().encode(state)
+            try data.write(to: savePath, options: [.atomic, .completeFileProtection])
+        } catch {
+            print("Unable to save state.")
+        }
     }
 }
 
