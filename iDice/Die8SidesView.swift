@@ -12,7 +12,7 @@ struct Die8SidesView: View {
     
     var body: some View {
         ZStack {
-            Triangle8()
+            Triangle()
                 .fill(.ultraThinMaterial)
                 .shadow(radius: 10)
             
@@ -24,13 +24,13 @@ struct Die8SidesView: View {
         }
         .frame(width: 100, height: 100)
         .background {
-            Triangle8()
+            Triangle()
                 .fill(Color.blue)
         }
     }
 }
 
-struct Triangle8: Shape {
+struct Triangle: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             path.move(to: CGPoint(x: rect.midX, y: rect.minY))

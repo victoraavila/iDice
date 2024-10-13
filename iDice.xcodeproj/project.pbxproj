@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		96B8E0792CBC1B5200E3FAD8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B8E0782CBC1B5200E3FAD8 /* AppState.swift */; };
+		96B8E0942CBC2DE900E3FAD8 /* Die12SidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B8E0932CBC2DE900E3FAD8 /* Die12SidesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		967E78D62CB38BE70053A67F /* iDice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iDice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96B8E0782CBC1B5200E3FAD8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		96B8E0932CBC2DE900E3FAD8 /* Die12SidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Die12SidesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +39,7 @@
 		967E78CD2CB38BE70053A67F = {
 			isa = PBXGroup;
 			children = (
+				96B8E0932CBC2DE900E3FAD8 /* Die12SidesView.swift */,
 				96B8E0782CBC1B5200E3FAD8 /* AppState.swift */,
 				967E78D82CB38BE70053A67F /* iDice */,
 				967E78D72CB38BE70053A67F /* Products */,
@@ -127,6 +130,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96B8E0942CBC2DE900E3FAD8 /* Die12SidesView.swift in Sources */,
 				96B8E0792CBC1B5200E3FAD8 /* AppState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

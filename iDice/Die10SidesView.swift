@@ -12,7 +12,7 @@ struct Die10SidesView: View {
     
     var body: some View {
         ZStack {
-            Triangle10()
+            Diamond()
                 .fill(
                     LinearGradient(
                         gradient: Gradient(colors: [Color.yellow.opacity(0.5), Color.yellow]),
@@ -32,7 +32,7 @@ struct Die10SidesView: View {
     }
 }
 
-struct Triangle10: Shape {
+struct Diamond: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             let height = rect.height
