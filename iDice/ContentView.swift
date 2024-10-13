@@ -11,13 +11,11 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var appState = AppState()
     
-    // To flick through multiple rolls instead of setting up a final value
     @State var startDate = Date.now
     @State var timeElapsed: Int = 0
     @State private var timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
     @State private var isRolling = false
     
-    // Storing previous results
     @State private var showBottomSheet = true
     @State private var detentAmount: PresentationDetent = .fraction(0.07)
     
@@ -31,11 +29,11 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             
-                            Die6SidesView(side: $appState.sides[0])
+                            getDieView(for: $appState.sides[0], numberOfSides: appState.diceSettings.numberOfSides)
                                 .padding(.horizontal)
                             
                             if (appState.diceSettings.numberOfDice > 1) {
-                                Die6SidesView(side: $appState.sides[1])
+                                getDieView(for: $appState.sides[1], numberOfSides: appState.diceSettings.numberOfSides)
                                     .padding(.horizontal)
                             }
                             
@@ -46,11 +44,11 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $appState.sides[2])
+                                getDieView(for: $appState.sides[2], numberOfSides: appState.diceSettings.numberOfSides)
                                     .padding(.horizontal)
                                 
                                 if (appState.diceSettings.numberOfDice > 3) {
-                                    Die6SidesView(side: $appState.sides[3])
+                                    getDieView(for: $appState.sides[3], numberOfSides: appState.diceSettings.numberOfSides)
                                         .padding(.horizontal)
                                 }
                                 
@@ -63,11 +61,11 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 
-                                Die6SidesView(side: $appState.sides[4])
+                                getDieView(for: $appState.sides[4], numberOfSides: appState.diceSettings.numberOfSides)
                                     .padding(.horizontal)
                                 
                                 if (appState.diceSettings.numberOfDice > 5) {
-                                    Die6SidesView(side: $appState.sides[5])
+                                    getDieView(for: $appState.sides[5], numberOfSides: appState.diceSettings.numberOfSides)
                                         .padding(.horizontal)
                                 }
                                 
@@ -88,7 +86,6 @@ struct ContentView: View {
                                 }
                                 appState.lastScores.append(appState.sides[0...appState.diceSettings.numberOfDice - 1].reduce(0, +))
                                 appState.saveState()
-                                
                             }
                         }
                     }
@@ -129,7 +126,7 @@ struct ContentView: View {
                     
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures VStack takes all available space
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .sheet(isPresented: $showBottomSheet, content: {
                     VStack {
                         Text("Previous results")
@@ -146,11 +143,11 @@ struct ContentView: View {
                         
                         Spacer()
                     }
-                        .interactiveDismissDisabled()
-                        .presentationBackgroundInteraction(.enabled)
-                        .presentationDetents([.fraction(0.07), .fraction(0.3)], selection: $detentAmount)
-                        .presentationDragIndicator(.visible)
-                        .ignoresSafeArea()
+                    .interactiveDismissDisabled()
+                    .presentationBackgroundInteraction(.enabled)
+                    .presentationDetents([.fraction(0.07), .fraction(0.3)], selection: $detentAmount)
+                    .presentationDragIndicator(.visible)
+                    .ignoresSafeArea()
                 })
             }
             .toolbar {
@@ -180,6 +177,19 @@ struct ContentView: View {
     
     private func startTimer() {
         timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
+    }
+    
+    @ViewBuilder
+    func getDieView(for side: Binding<Int>, numberOfSides: Int) -> some View {
+        switch numberOfSides {
+        case 6:
+            Die6SidesView(side: side)
+        case 8:
+            Die8SidesView(side: side)
+        // Add more cases for other die types
+        default:
+            Die6SidesView(side: side) // Default to 6-sided die or create a generic die view
+        }
     }
 }
 

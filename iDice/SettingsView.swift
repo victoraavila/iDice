@@ -53,5 +53,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(DiceSettings())
+        .environmentObject(AppState())
 }
