@@ -14,7 +14,7 @@ struct Die12SidesView: View {
     var body: some View {
         ZStack {
             Pentagon()
-                .fill(.ultraThinMaterial)
+                .fill(Color.red)
                 .shadow(radius: 10)
             
             Text("\(side)")
@@ -23,10 +23,6 @@ struct Die12SidesView: View {
                 .foregroundStyle(.white)
         }
         .frame(width: 100, height: 100)
-        .background {
-            Pentagon()
-                .fill(Color.red)
-        }
     }
 }
 
@@ -55,8 +51,6 @@ struct Pentagon: Shape {
 
 
 #Preview {
-    ZStack {
-        Die12SidesView(side: .constant(1))
-    }
+    Die12SidesView(side: .constant(1))
 }
 

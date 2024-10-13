@@ -13,13 +13,7 @@ struct Die10SidesView: View {
     var body: some View {
         ZStack {
             Diamond()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.yellow.opacity(0.5), Color.yellow]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
+                .fill(Color.orange)
                 .shadow(radius: 10)
             
             Text("\(side)")
@@ -48,8 +42,6 @@ struct Diamond: Shape {
 }
 
 #Preview {
-    ZStack {
-        Die10SidesView(side: .constant(1))
-    }
+    Die10SidesView(side: .constant(1))
 }
 

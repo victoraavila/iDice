@@ -13,7 +13,7 @@ struct Die8SidesView: View {
     var body: some View {
         ZStack {
             Triangle()
-                .fill(.ultraThinMaterial)
+                .fill(Color.blue)
                 .shadow(radius: 10)
             
             Text("\(side)")
@@ -23,10 +23,6 @@ struct Die8SidesView: View {
                 .offset(y: 15)
         }
         .frame(width: 100, height: 100)
-        .background {
-            Triangle()
-                .fill(Color.blue)
-        }
     }
 }
 
@@ -42,7 +38,5 @@ struct Triangle: Shape {
 }
 
 #Preview {
-    ZStack {
-        Die8SidesView(side: .constant(1))
-    }
+    Die8SidesView(side: .constant(1))
 }
