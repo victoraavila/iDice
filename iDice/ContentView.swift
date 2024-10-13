@@ -21,7 +21,8 @@ struct ContentView: View {
     
     // Storing previous results
     @State var lastScores: [Int] = []
-    @State private var currentDetent: PresentationDetent = .fraction(0.07)
+    @State private var showBottomSheet = true
+    @State private var detentAmount: PresentationDetent = .fraction(0.07)
     
     var body: some View {
         NavigationStack {
@@ -129,13 +130,13 @@ struct ContentView: View {
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures VStack takes all available space
-                .sheet(isPresented: .constant(true), content: {
+                .sheet(isPresented: $showBottomSheet, content: {
                     VStack {
                         Text("Previous results")
                             .padding(.top, 20)
                             .padding(.bottom)
                         
-                        if currentDetent == .fraction(0.3) {
+                        if detentAmount == .fraction(0.3) {
                             if lastScores.count > 0 {
                                 ForEach(lastScores.reversed(), id: \.self) { score in
                                     Text("\(score)")
@@ -147,7 +148,7 @@ struct ContentView: View {
                     }
                         .interactiveDismissDisabled()
                         .presentationBackgroundInteraction(.enabled)
-                        .presentationDetents([.fraction(0.07), .fraction(0.3)], selection: $currentDetent)
+                        .presentationDetents([.fraction(0.07), .fraction(0.3)], selection: $detentAmount)
                         .presentationDragIndicator(.visible)
                         .ignoresSafeArea()
                 })
@@ -165,7 +166,13 @@ struct ContentView: View {
                             .foregroundStyle(.gray)
                             .font(.title)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        showBottomSheet = false
+                    })
                 }
+            }
+            .onAppear {
+                showBottomSheet = true
             }
         }
     }
