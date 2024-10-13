@@ -19,6 +19,10 @@ struct ContentView: View {
     @State private var timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
     @State private var isRolling = false
     
+    // Storing previous results
+    @State var lastScores: [Int] = []
+    @State private var currentDetent: PresentationDetent = .fraction(0.07)
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -81,6 +85,10 @@ struct ContentView: View {
                             
                             if Int(firedDate.timeIntervalSince(startDate)) >= 1 {
                                 isRolling = false
+                                if lastScores.count >= 5 {
+                                    lastScores.removeFirst()
+                                }
+                                lastScores.append(sides[0...diceSettings.numberOfDice - 1].reduce(0, +))
                             }
                         }
                     }
@@ -117,8 +125,32 @@ struct ContentView: View {
                     }
                     
                     Spacer()
+                    
+                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures VStack takes all available space
+                .sheet(isPresented: .constant(true), content: {
+                    VStack {
+                        Text("Previous results")
+                            .padding(.top, 20)
+                            .padding(.bottom)
+                        
+                        if currentDetent == .fraction(0.3) {
+                            if lastScores.count > 0 {
+                                ForEach(lastScores.reversed(), id: \.self) { score in
+                                    Text("\(score)")
+                                }
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                        .interactiveDismissDisabled()
+                        .presentationBackgroundInteraction(.enabled)
+                        .presentationDetents([.fraction(0.07), .fraction(0.3)], selection: $currentDetent)
+                        .presentationDragIndicator(.visible)
+                        .ignoresSafeArea()
+                })
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
