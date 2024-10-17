@@ -182,6 +182,8 @@ struct ContentView: View {
     @ViewBuilder
     func getDieView(for side: Binding<Int>, numberOfSides: Int) -> some View {
         switch numberOfSides {
+        case 4:
+            Die4SidesView(side: side)
         case 6:
             Die6SidesView(side: side)
         case 8:
@@ -192,7 +194,8 @@ struct ContentView: View {
             Die12SidesView(side: side)
         case 20:
             Die20SidesView(side: side)
-        // Add more cases for other die types
+        case 100:
+            Die100SidesView(side: side)
         default:
             Die6SidesView(side: side) // Default to 6-sided die or create a generic die view
         }
